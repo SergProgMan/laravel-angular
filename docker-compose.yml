@@ -1,0 +1,30 @@
+version: '3'
+services:
+  nginx:
+    build: ./.docker/dev/nginx
+    image: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./app:/application
+      - ./.docker/dev/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./.docker/dev/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    links:
+      - php
+  php:
+    build: ./.docker/dev/php
+    image: php
+    volumes:
+      - ./app:/application
+      - ./.docker/dev/php/php.ini:/usr/local/etc/php/php.ini
+    links:
+      - mysql
+  mysql:
+    image: mysql:5
+    ports:
+      - "6000:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_DATABASE: myDb
+    volumes:
+      - ./.docker/data/mysql:/var/lib/mysql
