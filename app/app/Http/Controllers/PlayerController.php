@@ -19,14 +19,30 @@ class PlayerController extends Controller
             $start = $request->start;
             $n = $request->n;
             $last= $start + $n;
-            $players = DB::table('players')->whereBetween('id', [$start,$last] );
-            $players->all();
-           
-            dd($players);
+            $players = Player::whereBetween('id', [$start,$last] )->get();         
+            //dd($players);
         }
+        if ($request->has('level')){
+            $level = $request->level;
+            $players = Player::where('level', $level)->get();
+            //dd($players);
+        }
+        if ($request->has('search')){
+            $search = $request->search;
+            $players = Player::where('id', $search)
+                ->orWhere('name', $search)
+                ->orWhere('level', $search)
+                ->orWhere('score', $search)
+                ->get()->all();  
+            //dd($players);
+        }
+       // $players->get();
+        $count = $players->count();
 
 
-        return response(Player::all(), 200);
+
+        return response($players, 200)
+            ->header('x-total', $count);
     }
 
     /**
