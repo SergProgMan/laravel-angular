@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Player;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+//use Illuminate\Support\Facades\DB;
+use App\Rules\Uppercase;
 
 class PlayerController extends Controller
 {
@@ -36,10 +37,8 @@ class PlayerController extends Controller
                 ->get()->all();  
             //dd($players);
         }
-       // $players->get();
+
         $count = $players->count();
-
-
 
         return response($players, 200)
             ->header('x-total', $count);
@@ -64,7 +63,7 @@ class PlayerController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nane' => 'required',
+            'nane' => ['required', 'string', new Uppercase],
             'level'=> 'rookie'|'amateur'|'pro',
             'score' => digits_between(0,150),
         ]);
