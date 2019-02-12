@@ -13,6 +13,14 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::resource('/players', 'PlayerController', [
+//     'except' => ['edit', 'show', 'create']
+//   ]);
+//GET /api/v1/players?start=<num>&n=<num>
+
+Route::prefix('v1')
+  ->name('players.')
+  ->group(function(){
+    Route::get('players', 'PlayerController@index')->name('index');
+    Route::post('players', 'PlayerController@store')->name('store');
 });
