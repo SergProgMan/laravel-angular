@@ -1,22 +1,67 @@
-
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
-
 require('./bootstrap');
+import 'angular';
 
-window.Vue = require('vue');
+var app = angular.module('app', []);
 
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
 
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
+app.controller('PlayerController', ['$scope', '$http', function ($scope, $http) {
+    $scope.players = [];
+    console.log("success");
+    // List players
+    $scope.loadPlayers = function () {
+        $http.get('api/v1/players')
+            .then(function success(e) {
+                console.log("success");
+                $scope.players = e.data.players;
+            });
+    };
+    $scope.loadPlayers();
 
-const app = new Vue({
-    el: '#app'
-});
+    $scope.errors = [];
+ 
+    $scope.player = {
+        id: '',
+        name: '',
+        level: '',
+        score: ''
+    };
+    $scope.initPlayer = function () {
+        $scope.resetForm();
+        $("#add_new_player").modal('show');
+    };
+ 
+    // Add new Player
+    $scope.addPlayer = function () {
+        $http.post('/api/v1/players', {
+            name: $scope.player.name,
+            level: $scope.player.level,
+            score: $scope.player.score
+        }).then(function success(e) {
+            $scope.resetForm();
+            $scope.players.push(e.data.player);
+            $("#add_new_player").modal('hide');
+ 
+        }, function error(error) {
+            $scope.recordErrors(error);
+        });
+    };
+ 
+    $scope.recordErrors = function (error) {
+        $scope.errors = [];
+        if (error.data.errors.name) {
+            $scope.errors.push(error.data.errors.name[0]);
+        }
+ 
+        if (error.data.errors.description) {
+            $scope.errors.push(error.data.errors.description[0]);
+        }
+    };
+ 
+    $scope.resetForm = function () {
+        $scope.player.name = '';
+        $scope.player.level = '';
+        $scope.player.score = '';
+        
+        $scope.errors = [];
+    };
+}]);

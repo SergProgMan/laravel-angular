@@ -40,6 +40,10 @@ class PlayerController extends Controller
 
         $count = $players->count();
 
+        return response()->json([
+            'players' => $players,
+        ], 200);
+
         return response($players, 200)
             ->header('x-total', $count);
     }
