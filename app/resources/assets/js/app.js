@@ -6,12 +6,11 @@ var app = angular.module('app', []);
 
 app.controller('PlayerController', ['$scope', '$http', function ($scope, $http) {
     $scope.players = [];
-    console.log("success");
+   
     // List players
     $scope.loadPlayers = function () {
         $http.get('api/v1/players')
             .then(function success(e) {
-                console.log("success");
                 $scope.players = e.data.players;
             });
     };
@@ -23,7 +22,8 @@ app.controller('PlayerController', ['$scope', '$http', function ($scope, $http) 
         id: '',
         name: '',
         level: '',
-        score: ''
+        score: '',
+        suspected: '',
     };
     $scope.initPlayer = function () {
         $scope.resetForm();
@@ -51,9 +51,11 @@ app.controller('PlayerController', ['$scope', '$http', function ($scope, $http) 
         if (error.data.errors.name) {
             $scope.errors.push(error.data.errors.name[0]);
         }
- 
-        if (error.data.errors.description) {
-            $scope.errors.push(error.data.errors.description[0]);
+        if (error.data.errors.level) {
+            $scope.errors.push(error.data.errors.level[0]);
+        }
+        if (error.data.errors.score) {
+            $scope.errors.push(error.data.errors.score[0]);
         }
     };
  
@@ -63,5 +65,22 @@ app.controller('PlayerController', ['$scope', '$http', function ($scope, $http) 
         $scope.player.score = '';
         
         $scope.errors = [];
+    };
+
+    $scope.filterLevel = function (filter) {
+        $http.get('api/v1/players?level='+filter)
+            .then(function success(e) {
+                $scope.players = e.data.players;
+            });
+    };
+
+   
+
+    $scope.searchFilter = function () {
+        
+        $http.get('api/v1/players?search='+ $scope.searchText)
+            .then(function success(e) {
+                $scope.players = e.data.players;
+            });
     };
 }]);

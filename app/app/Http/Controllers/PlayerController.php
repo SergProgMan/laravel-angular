@@ -21,7 +21,7 @@ class PlayerController extends Controller
             $start = $request->start;
             $n = $request->n;
             $last= $start + $n;
-            $players = Player::whereBetween('id', [$start,$last] )->get()->all();         
+            $players = Player::whereBetween('id', [$start,$last] )->get();         
             //dd($players);
         }else if ($request->has('level')){
             $level = $request->level;
@@ -29,11 +29,12 @@ class PlayerController extends Controller
             //dd($players);
         }else if ($request->has('search')){
             $search = $request->search;
-            $players = Player::where('id', $search)
-                ->orWhere('name', $search)
-                ->orWhere('level', $search)
-                ->orWhere('score', $search)
-                ->get()->all();  
+            //dd($search);
+            $players = Player::Where('id', 'like', '%'.$search.'%')
+                ->orWhere('name', 'like', '%'.$search.'%')
+                ->orWhere('level', 'like', '%'.$search.'%')
+                ->orWhere('score', 'like', '%'.$search.'%')
+                ->get();  
             //dd($players);
         }else{
             $players = Player::all();
@@ -65,9 +66,9 @@ class PlayerController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nane' => ['required', 'string', new Uppercase],
-            'level'=> 'rookie'|'amateur'|'pro',
-            'score' => digits_between(0,150),
+            'name' => ['required', 'string', new Uppercase],
+            'level'=> 'required',
+            'score' => 'between:0,150|required',
         ]);
 
         $player = new Player();
@@ -76,7 +77,10 @@ class PlayerController extends Controller
         $player->score = $request->score;
         $player->save();
 
-        return response($player->jsonSerialize(), 201);
+        return response()->json([
+            'player' => $player,
+            'message'=> 'Success'
+        ], 201);
     }
 
     /**

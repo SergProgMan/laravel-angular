@@ -10,14 +10,14 @@
         <title>Tournament</title>
     </head>
     <body>  
-    
+        
         <div class="container" ng-controller="PlayerController">
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <button class="btn btn-primary btn-xs pull-right" ng-click="initPlayer()">Add Player</button>
-                            Player
+                            <p class="text-primary">Tournament​ ​ 101​ ​ - ​ ​ Final​ ​ Results</p>
                         </div>
      
                         <div class="panel-body">
@@ -26,16 +26,33 @@
                                     {{ session('status') }}
                                 </div>
                             @endif
-     
-     
+                            <div class="form">
+                                <input class="form-control" 
+                                        type="text" 
+                                        placeholder="Search" 
+                                        aria-label="Search" 
+                                        ng-model="searchText"
+                                        ng-change="searchFilter()">
+                            </div>
+                              
                             <table class="table table-bordered table-striped" ng-if="players.length > 0">
                                 <tr>
                                     <th>Id</th>
                                     <th>Name</th>
-                                    <th>Level</th>
+                                    <th>
+                                        <div class="dropdown">
+                                            <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">Level
+                                            <span class="caret"></span></button>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="#" ng-click="filterLevel('rookie')">rookie</a></li>
+                                                <li><a href="#" ng-click="filterLevel('amateur')">amateur</a></li>
+                                                <li><a href="#" ng-click="filterLevel('pro')">pro</a></li>
+                                            </ul>
+                                        </div>
+                                    </th>
                                     <th>Score</th>
                                 </tr>
-                                <tr ng-repeat="(index, player) in players">
+                                <tr ng-repeat="(index, player) in players" ng-class="{'danger': player.Suspected}">
                                     <td>@{{ player.id }}</td>
                                     <td>@{{ player.name }}</td>
                                     <td>@{{ player.level }}</td>

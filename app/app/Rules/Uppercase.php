@@ -35,6 +35,6 @@ class Uppercase implements Rule
      */
     public function message()
     {
-        return 'The Player​ name :attribute​ should​ be​ capitalized.';
+        return 'The Player​ :attribute​ should​ be​ capitalized.';
     }
 }

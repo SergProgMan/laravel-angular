@@ -8,6 +8,8 @@ $factory->define(App\Player::class, function (Faker $faker) {
         'name' => $faker->name,
         'level' => $level,
         'score' => $faker->numberBetween(0, 150),
+        'Suspected' => $faker->numberBetween(0, 1),
+
     ];
 
 });
