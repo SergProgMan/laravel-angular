@@ -16,19 +16,18 @@ class PlayerController extends Controller
      */
     public function index(Request $request)
     {
+
         if ($request->has(['start', 'n'])) {
             $start = $request->start;
             $n = $request->n;
             $last= $start + $n;
-            $players = Player::whereBetween('id', [$start,$last] )->get();         
+            $players = Player::whereBetween('id', [$start,$last] )->get()->all();         
             //dd($players);
-        }
-        if ($request->has('level')){
+        }else if ($request->has('level')){
             $level = $request->level;
             $players = Player::where('level', $level)->get();
             //dd($players);
-        }
-        if ($request->has('search')){
+        }else if ($request->has('search')){
             $search = $request->search;
             $players = Player::where('id', $search)
                 ->orWhere('name', $search)
@@ -36,16 +35,15 @@ class PlayerController extends Controller
                 ->orWhere('score', $search)
                 ->get()->all();  
             //dd($players);
+        }else{
+            $players = Player::all();
         }
 
-        $count = $players->count();
+        $count = count($players);
 
         return response()->json([
             'players' => $players,
-        ], 200);
-
-        return response($players, 200)
-            ->header('x-total', $count);
+        ], 200)->header('x-total', $count);
     }
 
     /**

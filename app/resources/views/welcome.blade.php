@@ -45,8 +45,74 @@
                         </div>
                     </div>
                 </div>
-            </div>     
+            </div>
+            <div class="modal fade" tabindex="-1" role="dialog" id="add_new_player">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                            aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title">Add Player</h4>
+                            </div>
+                            <div class="modal-body">
+         
+                                <div class="alert alert-danger" ng-if="errors.length > 0">
+                                    <ul>
+                                        <li ng-repeat="error in errors">@{{ error }}</li>
+                                    </ul>
+                                </div>
+         
+                                <div class="form-group">
+                                    <label for="name">Name</label>
+                                    <input type="text" name="name" class="form-control" ng-model="player.name">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="level">Level</label>  
+                                    <div class="form-group" id="level">                                                                    
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" 
+                                                    type="radio" 
+                                                    name="inlineRadioOptions" 
+                                                    id="inlineRadio1" 
+                                                    value="rookie"
+                                                    ng-model="player.level">
+                                            <label class="form-check-label" for="inlineRadio1">rookie</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" 
+                                                    type="radio" 
+                                                    name="inlineRadioOptions" 
+                                                    id="inlineRadio2" 
+                                                    value="amateur" 
+                                                    ng-model="player.level">
+                                            <label class="form-check-label" for="inlineRadio2">amateur</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" 
+                                                    type="radio" 
+                                                    name="inlineRadioOptions" 
+                                                    id="inlineRadio3" 
+                                                    value="pro" 
+                                                    ng-model="player.level">
+                                            <label class="form-check-label" for="inlineRadio3">pro</label>
+                                        </div> 
+                                        <div class="form-group">
+                                            <label for="score">Score</label>                                 
+                                            <input type="number" min="0" step="1" max="150" name="score" class="form-control " ng-model="player.score">
+                                        </div>   
+                                    </div>
+                                </div>                                                     
+     
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" ng-click="addPlayer()">Submit</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->     
         </div>
-   
+    <!-- Scripts -->
+    <script src="{{ asset('js/app.js') }}"></script>
     </body>
 </html>
