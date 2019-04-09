@@ -71,6 +71,8 @@ class PlayerController extends Controller
             'score' => 'between:0,150|required',
         ]);
 
+        //dd($request);
+
         $player = new Player();
         $player->name = $request->name;
         $player->level = $request->level;
